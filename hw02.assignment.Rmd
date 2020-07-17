@@ -1,0 +1,142 @@
+---
+title: "R Notebook"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+
+1.a. Write a function that calculates the mean of any numeric vector you give it, without using the built-in mean() or sum() functions.
+```{r}
+mean.fun <- function(x)
+{
+  count <-  0
+  for (i in 1 : length(x))
+  {
+    count <-  count + x[i]
+  }
+  mean.val <- count / length(x)
+  return(mean.val)
+}
+
+v <- 1:10
+mean.fun(v)
+```
+
+1.b. Write a function that takes as its input a vector with four elements. If the sum of the first two elements is greater than the sum of the second two, the function returns the vector; otherwise it returns 0.
+```{r}
+func1 <- function(x)
+{
+  sum1 <- x[1] + x[2]
+  sum2 <- x[3] + x[4]
+  if (sum1 > sum2)
+  {
+    return(x)
+  }
+  else
+  {
+      return(0)
+  }
+}
+
+vec <- 20:2
+vec
+func1(vec)
+```
+
+1.c. Write a function that calculates the Fibonacci sequence up to the nth element, where n is any number input into your function (its argument). The Fibonacci sequence is: 1, 1, 2, 3, 5, 8, 13, 21. . . , ie, each element is the sum of the previous two elements. One way to do this is to start off with the first two elements, c(1,1) and set an internal variable to this sequence. Then write a loop that counts up to n, where for each new element, you first calculate it by adding the last two elements of the growing sequence, and then stick that new number onto the growing sequence using c(). When the loop is finished, the function should return the final vector of Fibonacci numbers
+```{r}
+fib.fun <- function(x)
+{
+  fib.val <- numeric(x)
+  fib.val[1] <- 1
+  fib.val[2] <- 1
+  for (i in 3 : x)
+  {
+    fib.val[i] <- fib.val[i - 1] + fib.val[i - 2]
+  }
+  return(fib.val)
+}
+
+x <- 10
+fib.fun(x)
+```
+
+1.d. Create a 4x4 matrix of the numbers 1 through 16. Use apply to apply you function from (a) to each of the rows in your matrix.
+```{r}
+m1 <- matrix(data = 1 : 16, nrow = 4, ncol = 4)
+m1
+apply(m1, 1, mean.fun)
+
+```
+
+2.a. Using the airquality dataset, constuct an aggregated dataset which shows the maximum wind and ozone by month.
+```{r}
+data("airquality")
+head(airquality)
+aggregate(data = airquality, cbind(Wind,Ozone) ~ Month,  max)
+```
+
+2.b. Create the authors and books datasets following the example and data in the lecture, and then create a new data set by merging these two datasets by author, preserving all rows.
+```{r}
+authors <- data.frame(
+    surname = c("Tukey", "Venables", "Tierney", "Ripley", "McNeil"), 
+    nationality = c("US", "Australia", "US", "UK", "Australia"),
+    stringsAsFactors=FALSE)
+books <- data.frame(
+    name = c("Tukey", "Venables", "Tierney",
+               "Ripley", "Ripley", "McNeil", "R Core"),
+    title = c("Exploratory Data Analysis",
+              "Modern Applied Statistics ...",
+              "LISP-STAT",
+              "Spatial Statistics", "Stochastic Simulation",
+              "Interactive Data Analysis",
+              "An Introduction to R"),
+    stringsAsFactors=FALSE)
+merge(authors, books, by.x = "surname", by.y = "name", all = TRUE)
+```
+
+2.c. Take the following string and replace every instance of “to” or “To” with “2”
+To be, or not to be – that is the question: Whether ’tis nobler in the mind to suffer
+The slings and arrows of outrageous fortune, Or to take arms against a sea of troubles,
+And by opposing end them. To die – to sleep – No more...
+```{r}
+verse <- "To be, or not to be – that is the question: Whether ’tis nobler in the mind to suffer The slings and arrows of outrageous fortune, Or to take arms against a sea of troubles, And by opposing end them. To die – to sleep – No more..."
+
+gsub("(T|t)o", "2", verse)
+```
+
+3.a. Create a histogram using the base R graphics using some dataset or variable other than the one in the lessons. Always make sure your graph has well-labeled x and y axes and an explanatory title.
+```{r}
+data("USArrests")
+hist(USArrests$Assault, main = "Histogram of Assaults in USA", xlab = "Assaults in USA")
+```
+ 
+3.b. Create a scatter plot using the base R graphics, again with some variable other than the one in the lessons.
+```{r}
+plot(USArrests$Murder, USArrests$Assault, main = "Murder Rate vs Assault Rate", xlab = "Murder Rate", ylab = "Assault Rate", col= c("deeppink", "blue"), pch = 20, cex = 1.5)
+```
+
+3.c. Create a histogram using ggplot, using some new data. In this and the later plots, please tinker with the settings using the examples in http://www.cookbook-r.com/Graphs/ to make it prettier.
+```{r}
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+data("diamonds")
+head(diamonds)
+
+
+ggplot(data = diamonds, mapping = aes(x = price)) + geom_histogram(binwidth = 50) + ggtitle("Diamond Price Distribution") + xlab("Diamond Price - Binwidth 50") + ylab("Frequency") + theme_minimal() + xlim(0,2500)
+```
+3.d. Create a box plot (with multiple categories) using ggplot, using some new data.
+```{r}
+data(mpg)
+head(mpg)
+
+
+```
+
+3.e. Create a scatter plot using ggplot, using some new data
+```{r}
+
+```
